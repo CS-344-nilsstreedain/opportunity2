@@ -60,8 +60,8 @@ def train(args, model, train_loader, optimizer, epoch):
         tqdm(train_loader, desc=' : [train:epoch:{}]'.format(epoch))):
 
         optimizer.zero_grad()
-        # TODO - Get the predictions for data using the model
-        # TODO - Compute the cross-entropy loss between the predictions and the target
+        output = model(data)  # MODIFIED - Get the predictions for data using the model
+        loss = F.cross_entropy(output, target)  # MODIFIED - Compute the cross-entropy loss between the predictions and the target
         loss.backward()
         optimizer.step()
 
@@ -87,7 +87,7 @@ def test(model, test_loader, epoch):
         for bix, (data, target) in enumerate( \
             tqdm(test_loader, desc=' : [test:epoch:{}]'.format(epoch))):
 
-            # TODO - Get the predictions for data using the model
+            output = model(data)  # MODIFIED - Get the predictions for data using the model
             epoch_loss += F.cross_entropy(output, target, reduction='sum').item()   # sum up batch loss
             epoch_pred  = output.argmax(dim=1, keepdim=True)                        # get the index of the max log-probability
             epoch_acc  += epoch_pred.eq(target.view_as(epoch_pred)).sum().item()
